@@ -1,0 +1,22 @@
+{
+  "name": "Premium Calendar 2026",
+  "short_name": "Calendar 2026",
+  "description": "Premium Live Calendar 2026 with Marathi Tithi and Festivals",
+  "start_url": "./premium_calendar_2026.html",
+  "display": "standalone",
+  "background_color": "#111111",
+  "theme_color": "#111111",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "https://via.placeholder.com/192x192/111111/ffffff?text=Cal",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "https://via.placeholder.com/512x512/111111/ffffff?text=Cal",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

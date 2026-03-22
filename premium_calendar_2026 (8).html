@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Premium Calendar 2026</title>
+<meta name="application-name" content="Calendar 2026">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black">
+<meta name="apple-mobile-web-app-title" content="Calendar 2026">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#111111">
+<link rel="manifest" href="manifest.json">
+<link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Pacifico&family=Dancing+Script:wght@400;700&family=Satisfy&family=Sacramento&family=Great+Vibes&family=Yellowtail&family=Cookie&family=Courgette&family=Kaushan+Script&family=Marck+Script&family=Allura&family=Alex+Brush&family=Arizonia&family=Italianno&family=Pinyon+Script&family=Clicker+Script&family=Ruthie&family=Lovers+Quarrel&family=Monsieur+La+Doulaise&family=Niconne&family=Norican&family=Oleo+Script:wght@400;700&family=Permanent+Marker&family=Rock+Salt&family=Covered+By+Your+Grace&family=Just+Another+Hand&family=Indie+Flower&family=Shadows+Into+Light&family=Patrick+Hand&family=Architects+Daughter&family=Amatic+SC:wght@400;700&family=Handlee&family=Mali:wght@400;600&family=Playpen+Sans:wght@400;600&family=Gochi+Hand&family=Fuzzy+Bubbles&family=Dekko&family=Tillana:wght@400;600&family=Yatra+One&family=Henny+Penny&family=Schoolbell&family=Reenie+Beanie&family=Zeyada&family=Kristi&family=La+Belle+Aurore&family=Dawning+of+a+New+Day&family=Give+You+Glory&family=Loved+by+the+King&family=Over+the+Rainbow&family=Petemoss&family=Waterfall&family=Noto+Sans+Devanagari:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+:root{--font:'Caveat',cursive;}
+body{background:#111;font-family:var(--font);min-height:100vh;display:flex;flex-direction:column;align-items:center;color:#fff;padding-bottom:60px;}
+.wrapper{width:100%;max-width:430px;background:#111;min-height:100vh;}
+
+/* CLOCK */
+.clock-bar{background:#0d0d0d;padding:28px 22px 20px;border-bottom:1px solid #1e1e1e;}
+.clock-time{font-family:var(--font);font-size:72px;font-weight:400;letter-spacing:-1px;line-height:1;color:#e8e8e8;}
+.clock-time .sep{animation:blink 1s step-end infinite;}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.12}}
+.clock-date{font-family:var(--font);font-size:18px;color:#555;margin-top:4px;}
+.clock-tithi{font-family:'Noto Sans Devanagari',sans-serif;font-size:13px;color:#3a3a3a;margin-top:3px;}
+
+/* FONT PICKER BAR */
+.font-bar{background:#0a0a0a;padding:10px 12px;border-bottom:1px solid #1a1a1a;display:flex;align-items:center;gap:8px;overflow-x:auto;scrollbar-width:none;}
+.font-bar::-webkit-scrollbar{display:none;}
+.font-label{font-size:10px;color:#333;white-space:nowrap;letter-spacing:1px;flex-shrink:0;}
+.font-chip{font-size:14px;color:#555;padding:5px 12px;border-radius:20px;border:1px solid #222;cursor:pointer;white-space:nowrap;flex-shrink:0;transition:all .2s;background:#111;}
+.font-chip:hover{border-color:#444;color:#bbb;}
+.font-chip.active{border-color:#777;color:#eee;background:#1a1a1a;}
+
+/* CALENDAR */
+.cal-wrap{background:#0d0d0d;margin:10px;border-radius:10px;overflow:hidden;border:1px solid #1e1e1e;}
+.cal-head{padding:20px 20px 0;display:flex;justify-content:space-between;align-items:flex-start;}
+.month-big{font-family:var(--font);font-size:60px;font-weight:600;color:#ddd;line-height:1;}
+.year-num{font-family:var(--font);font-size:18px;color:#444;margin-top:2px;}
+.nav-row{display:flex;gap:6px;margin-top:8px;}
+.nav-btn{background:transparent;border:1px solid #222;color:#555;width:30px;height:30px;font-size:18px;cursor:pointer;display:flex;align-items:center;justify-content:center;border-radius:6px;transition:all .2s;}
+.nav-btn:hover{border-color:#444;color:#ccc;}
+.day-names{display:grid;grid-template-columns:repeat(7,1fr);padding:16px 12px 6px;border-bottom:1px solid #1a1a1a;margin:0 4px;}
+.dn{text-align:center;font-family:var(--font);font-size:15px;font-weight:500;color:#444;}
+.dn.sun{color:#5a2020;}.dn.sat{color:#2a2a5a;}
+.days-outer{padding:0 4px 12px;}
+.week-row{display:grid;grid-template-columns:repeat(7,1fr);border-bottom:1px solid #181818;}
+.week-row:last-child{border-bottom:none;}
+.dc{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:7px 1px;position:relative;cursor:pointer;min-height:52px;border-radius:6px;transition:background .15s;}
+.dc:hover{background:#181818;}
+.dc-num{font-family:var(--font);font-size:20px;font-weight:400;color:#bbb;line-height:1;}
+.dc.other .dc-num{color:#252525;font-size:16px;}
+.dc.sun-col .dc-num{color:#6b2020;}
+.dc.sat-col .dc-num{color:#2a2a6b;}
+.dc.today .dc-num{background:#e8e8e8;color:#000;width:34px;height:34px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;}
+.dc-tithi{font-family:'Noto Sans Devanagari',sans-serif;font-size:6px;color:#2e2e2e;margin-top:1px;text-align:center;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:0 1px;}
+.dc.today .dc-tithi{color:#555;}
+
+/* DOTS */
+.dc-dots{display:flex;gap:2px;margin-top:2px;flex-wrap:wrap;justify-content:center;max-width:38px;}
+/* Regular dot */
+.dc-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;}
+/* Tricolor dot — split into 3 vertical stripes */
+.dc-dot-tricolor{width:12px;height:6px;border-radius:3px;flex-shrink:0;background:linear-gradient(to right,#FF9933 33%,#ffffff 33%,#ffffff 66%,#138808 66%);border:0.5px solid rgba(255,255,255,0.1);}
+/* White dot for Christian */
+.dc-dot-white{width:6px;height:6px;border-radius:50%;flex-shrink:0;background:#f0f0f0;border:1px solid #444;}
+
+/* FOOTER */
+.footer-nav{display:flex;justify-content:space-between;align-items:center;padding:10px 16px;margin:0 10px 10px;background:#0d0d0d;border-radius:8px;border:1px solid #1e1e1e;flex-wrap:wrap;gap:6px;}
+.f-btn{font-family:var(--font);font-size:16px;font-weight:500;background:#181818;border:1px solid #252525;color:#888;padding:7px 14px;border-radius:6px;cursor:pointer;transition:all .2s;}
+.f-btn:hover{color:#ccc;border-color:#333;}
+.live-badge{display:flex;align-items:center;gap:5px;font-family:var(--font);font-size:14px;color:#333;}
+.pulse{width:6px;height:6px;border-radius:50%;background:#333;animation:pls 2s infinite;}
+@keyframes pls{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* LISTS */
+.list-card{background:#0d0d0d;border:1px solid #1e1e1e;border-radius:10px;padding:14px 16px;margin:0 10px 10px;}
+.list-title{font-family:var(--font);font-size:18px;font-weight:600;color:#555;letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;padding-bottom:8px;border-bottom:1px solid #181818;}
+.fest-month-lbl{font-family:var(--font);font-size:16px;font-weight:600;color:#3a3a3a;margin:8px 0 4px;}
+.fest-row{display:flex;align-items:center;gap:10px;padding:6px 0;border-bottom:1px solid #161616;}
+.fest-row:last-child{border-bottom:none;}
+.fest-bar{width:2px;height:28px;border-radius:2px;flex-shrink:0;}
+.fest-info{flex:1;}
+.fest-name{font-family:var(--font);font-size:16px;font-weight:500;color:#bbb;}
+.fest-rel{font-size:10px;color:#333;margin-top:1px;}
+.fest-dt{font-family:var(--font);font-size:14px;color:#3a3a3a;white-space:nowrap;}
+
+/* PANEL */
+.overlay{position:fixed;inset:0;z-index:100;background:rgba(0,0,0,0.9);display:none;align-items:flex-end;justify-content:center;}
+.overlay.open{display:flex;}
+.panel{background:#0d0d0d;border-top:1px solid #222;border-radius:20px 20px 0 0;padding:24px 18px 44px;width:100%;max-width:430px;max-height:85vh;overflow-y:auto;}
+.panel-title{font-family:var(--font);font-size:26px;font-weight:600;color:#ccc;margin-bottom:14px;}
+.panel-tabs{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.tab-btn{font-family:var(--font);font-size:15px;background:#1a1a1a;border:1px solid #252525;color:#555;padding:7px 14px;border-radius:20px;cursor:pointer;transition:all .2s;}
+.tab-btn.active{background:#222;border-color:#444;color:#ccc;}
+.p-field{background:#1a1a1a;border:1px solid #252525;border-radius:8px;color:#ccc;font-family:var(--font);font-size:16px;padding:10px 12px;width:100%;outline:none;margin-bottom:10px;appearance:none;}
+.p-field option{background:#111;}
+.p-field::placeholder{color:#333;}
+.p-row{display:flex;gap:8px;}
+.p-row .p-field{flex:1;}
+
+/* Font panel grid */
+.font-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;max-height:260px;overflow-y:auto;margin-bottom:12px;}
+.font-card{background:#1a1a1a;border:1px solid #252525;border-radius:8px;padding:8px 6px;cursor:pointer;text-align:center;transition:all .2s;}
+.font-card:hover{border-color:#444;}
+.font-card.active{border-color:#888;background:#222;}
+.font-card-preview{font-size:18px;color:#ccc;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.font-card-name{font-size:9px;color:#333;margin-top:3px;font-family:'Inter',sans-serif;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+/* Color row */
+.color-row{display:flex;gap:7px;margin-bottom:12px;flex-wrap:wrap;}
+.color-opt{width:26px;height:26px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:transform .15s,border-color .15s;}
+.color-opt:hover{transform:scale(1.15);}
+.color-opt.selected{border-color:#fff;transform:scale(1.2);}
+
+.scroll-list{max-height:140px;overflow-y:auto;margin-bottom:12px;}
+.ex-item{display:flex;align-items:center;gap:8px;padding:6px 0;border-bottom:1px solid #181818;}
+.ex-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.ex-name{flex:1;font-family:var(--font);font-size:15px;color:#888;}
+.ex-date{font-family:var(--font);font-size:13px;color:#333;}
+.ex-del{background:transparent;border:1px solid #2a2a2a;color:#3a3a3a;font-size:11px;padding:3px 8px;border-radius:4px;cursor:pointer;}
+.btn-main{width:100%;padding:14px;background:#e8e8e8;border:none;border-radius:8px;font-family:var(--font);font-size:18px;font-weight:600;color:#000;cursor:pointer;margin-top:4px;}
+.btn-sec{width:100%;padding:12px;background:transparent;border:1px solid #222;border-radius:8px;font-family:var(--font);font-size:16px;color:#444;cursor:pointer;margin-top:8px;}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;}
+.leg-item{display:flex;align-items:center;gap:5px;font-family:var(--font);font-size:13px;color:#555;}
+.leg-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.leg-dot-tri{width:14px;height:7px;border-radius:3px;background:linear-gradient(to right,#FF9933 33%,#fff 33%,#fff 66%,#138808 66%);}
+.leg-dot-white{width:8px;height:8px;border-radius:50%;background:#f0f0f0;border:1px solid #444;}
+
+.tip{position:fixed;z-index:200;background:#000;border:1px solid #2a2a2a;border-radius:8px;padding:8px 14px;font-family:var(--font);font-size:15px;color:#ccc;pointer-events:none;display:none;max-width:240px;}
+</style>
+</head>
+<body>
+<div class="tip" id="tip"></div>
+<div class="wrapper">
+
+  <!-- CLOCK -->
+  <div class="clock-bar">
+    <div class="clock-time" id="clockTime"></div>
+    <div class="clock-date" id="clockDate"></div>
+    <div class="clock-tithi" id="clockTithi"></div>
+  </div>
+
+  <!-- FONT QUICK BAR -->
+  <div class="font-bar" id="fontBar">
+    <span class="font-label">FONT ›</span>
+  </div>
+
+  <!-- CALENDAR -->
+  <div class="cal-wrap">
+    <div class="cal-head">
+      <div>
+        <div class="month-big" id="monthBig"></div>
+        <div class="year-num" id="yearNum"></div>
+      </div>
+      <div class="nav-row">
+        <button class="nav-btn" onclick="changeMonth(-1)">&#8249;</button>
+        <button class="nav-btn" onclick="changeMonth(1)">&#8250;</button>
+      </div>
+    </div>
+    <div class="day-names">
+      <div class="dn sun">Sun</div><div class="dn">Mon</div><div class="dn">Tue</div>
+      <div class="dn">Wed</div><div class="dn">Thu</div><div class="dn">Fri</div>
+      <div class="dn sat">Sat</div>
+    </div>
+    <div class="days-outer" id="daysOuter"></div>
+  </div>
+
+  <!-- FOOTER -->
+  <div class="footer-nav">
+    <button class="f-btn" onclick="goToday()">Today</button>
+    <div class="live-badge"><span class="pulse"></span>Live 2026</div>
+    <button class="f-btn" onclick="openPanel('event')">+ Event</button>
+    <button class="f-btn" onclick="openPanel('fest')">+ Fest</button>
+    <button class="f-btn" onclick="openPanel('font')">🔤 Font</button>
+  </div>
+
+  <!-- DOT LEGEND -->
+  <div class="list-card">
+    <div class="list-title">Dot Legend</div>
+    <div class="legend">
+      <div class="leg-item"><div class="leg-dot" style="background:#FF6600"></div>Hindu</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#27ae60"></div>Muslim</div>
+      <div class="leg-item"><div class="leg-dot-white"></div>Christian</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#3498db"></div>Buddhist</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#d4ac0d"></div>Sikh</div>
+      <div class="leg-item"><div class="leg-dot" style="background:#8e44ad"></div>Jain</div>
+      <div class="leg-item"><div class="leg-dot-tri"></div>National</div>
+    </div>
+  </div>
+
+  <!-- FESTIVAL LIST -->
+  <div class="list-card">
+    <div class="list-title">Festivals 2026</div>
+    <div id="festList"></div>
+  </div>
+
+  <!-- EVENTS LIST -->
+  <div class="list-card" id="eventsCard" style="display:none;">
+    <div class="list-title">My Events</div>
+    <div id="eventList"></div>
+  </div>
+
+</div>
+
+<!-- PANEL -->
+<div class="overlay" id="overlay">
+  <div class="panel">
+    <div class="panel-title" id="panelTitle">Options</div>
+    <div class="panel-tabs">
+      <button class="tab-btn" id="tabEvent" onclick="switchTab('event')">📌 My Event</button>
+      <button class="tab-btn" id="tabFest" onclick="switchTab('fest')">🎉 Festival</button>
+      <button class="tab-btn" id="tabFont" onclick="switchTab('font')">🔤 Font</button>
+    </div>
+
+    <!-- EVENT FORM -->
+    <div id="formEvent">
+      <div class="scroll-list" id="existEvents"></div>
+      <input class="p-field" type="text" id="evtName" placeholder="Event name (Meeting, Holiday...)">
+      <div class="p-row">
+        <input class="p-field" type="date" id="evtDate" min="2026-01-01" max="2026-12-31" value="2026-01-01">
+        <input class="p-field" type="text" id="evtNote" placeholder="Note">
+      </div>
+      <div style="font-size:13px;color:#333;margin-bottom:7px;font-family:var(--font);">Dot Color:</div>
+      <div class="color-row" id="colorRow"></div>
+    </div>
+
+    <!-- FEST FORM -->
+    <div id="formFest" style="display:none;">
+      <div class="scroll-list" id="existFests"></div>
+      <input class="p-field" type="text" id="festName" placeholder="Festival name">
+      <div class="p-row">
+        <input class="p-field" type="date" id="festDate" min="2026-01-01" max="2026-12-31" value="2026-01-01">
+        <select class="p-field" id="festRel">
+          <option>Hindu</option><option>Muslim</option><option>Christian</option>
+          <option>Buddhist</option><option>Sikh</option><option>Jain</option>
+          <option>National</option><option>Other</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- FONT FORM -->
+    <div id="formFont" style="display:none;">
+      <div style="font-size:13px;color:#444;margin-bottom:10px;font-family:'Inter',sans-serif;">60+ Handwriting & Unique Fonts — tap to select:</div>
+      <div class="font-grid" id="fontGrid"></div>
+    </div>
+
+    <button class="btn-main" id="addBtn" onclick="addItem()">Add</button>
+    <button class="btn-sec" onclick="closePanel()">Done</button>
+  </div>
+</div>
+
+<script>
+// ── 62 FONTS ──
+const fontList = [
+  {name:'Caveat',label:'Caveat'},
+  {name:'Dancing Script',label:'Dancing Script'},
+  {name:'Pacifico',label:'Pacifico'},
+  {name:'Satisfy',label:'Satisfy'},
+  {name:'Sacramento',label:'Sacramento'},
+  {name:'Great Vibes',label:'Great Vibes'},
+  {name:'Yellowtail',label:'Yellowtail'},
+  {name:'Cookie',label:'Cookie'},
+  {name:'Courgette',label:'Courgette'},
+  {name:'Kaushan Script',label:'Kaushan Script'},
+  {name:'Marck Script',label:'Marck Script'},
+  {name:'Allura',label:'Allura'},
+  {name:'Alex Brush',label:'Alex Brush'},
+  {name:'Arizonia',label:'Arizonia'},
+  {name:'Italianno',label:'Italianno'},
+  {name:'Pinyon Script',label:'Pinyon Script'},
+  {name:'Clicker Script',label:'Clicker Script'},
+  {name:'Ruthie',label:'Ruthie'},
+  {name:'Lovers Quarrel',label:'Lovers Quarrel'},
+  {name:'Monsieur La Doulaise',label:'Monsieur La D.'},
+  {name:'Niconne',label:'Niconne'},
+  {name:'Norican',label:'Norican'},
+  {name:'Oleo Script',label:'Oleo Script'},
+  {name:'Permanent Marker',label:'Permanent Marker'},
+  {name:'Rock Salt',label:'Rock Salt'},
+  {name:'Covered By Your Grace',label:'Covered By Grace'},
+  {name:'Just Another Hand',label:'Just Another Hand'},
+  {name:'Indie Flower',label:'Indie Flower'},
+  {name:'Shadows Into Light',label:'Shadows Into Light'},
+  {name:'Patrick Hand',label:'Patrick Hand'},
+  {name:'Architects Daughter',label:'Architects Daughter'},
+  {name:'Amatic SC',label:'Amatic SC'},
+  {name:'Handlee',label:'Handlee'},
+  {name:'Mali',label:'Mali'},
+  {name:'Playpen Sans',label:'Playpen Sans'},
+  {name:'Gochi Hand',label:'Gochi Hand'},
+  {name:'Fuzzy Bubbles',label:'Fuzzy Bubbles'},
+  {name:'Dekko',label:'Dekko'},
+  {name:'Tillana',label:'Tillana'},
+  {name:'Henny Penny',label:'Henny Penny'},
+  {name:'Schoolbell',label:'Schoolbell'},
+  {name:'Reenie Beanie',label:'Reenie Beanie'},
+  {name:'Zeyada',label:'Zeyada'},
+  {name:'Kristi',label:'Kristi'},
+  {name:'La Belle Aurore',label:'La Belle Aurore'},
+  {name:'Dawning of a New Day',label:'Dawning New Day'},
+  {name:'Give You Glory',label:'Give You Glory'},
+  {name:'Loved by the King',label:'Loved by the King'},
+  {name:'Over the Rainbow',label:'Over the Rainbow'},
+  {name:'Waterfall',label:'Waterfall'},
+  {name:'Petemoss',label:'Petemoss'},
+  {name:'Yatra One',label:'Yatra One'},
+  {name:'Georgia',label:'Georgia (Serif)'},
+  {name:'Times New Roman',label:'Times New Roman'},
+  {name:'Palatino Linotype',label:'Palatino'},
+  {name:'Courier New',label:'Courier New'},
+  {name:'Trebuchet MS',label:'Trebuchet'},
+  {name:'Verdana',label:'Verdana'},
+  {name:'Arial Narrow',label:'Arial Narrow'},
+  {name:'Impact',label:'Impact'},
+  {name:'Comic Sans MS',label:'Comic Sans'},
+  {name:'Lucida Handwriting',label:'Lucida Handwriting'},
+];
+
+let currentFont = fontList[0].name;
+
+function applyFont(name) {
+  currentFont = name;
+  document.documentElement.style.setProperty('--font', `'${name}',cursive`);
+  document.querySelectorAll('.font-chip').forEach(c => c.classList.toggle('active', c.dataset.font===name));
+  document.querySelectorAll('.font-card').forEach(c => c.classList.toggle('active', c.dataset.font===name));
+}
+
+// Build quick font bar (first 12)
+const fontBar = document.getElementById('fontBar');
+fontList.slice(0, 12).forEach(f => {
+  const chip = document.createElement('div');
+  chip.className = 'font-chip' + (f.name===currentFont?' active':'');
+  chip.dataset.font = f.name;
+  chip.style.fontFamily = `'${f.name}',cursive`;
+  chip.textContent = f.label;
+  chip.onclick = () => applyFont(f.name);
+  fontBar.appendChild(chip);
+});
+
+// Build font grid (all 62)
+function buildFontGrid() {
+  const grid = document.getElementById('fontGrid');
+  grid.innerHTML = '';
+  fontList.forEach(f => {
+    const card = document.createElement('div');
+    card.className = 'font-card' + (f.name===currentFont?' active':'');
+    card.dataset.font = f.name;
+    card.innerHTML = `<span class="font-card-preview" style="font-family:'${f.name}',cursive;">Jan. 2026</span><div class="font-card-name">${f.label}</div>`;
+    card.onclick = () => { applyFont(f.name); };
+    grid.appendChild(card);
+  });
+}
+
+// ── TITHI ──
+const tithiData = {
+  '2026-01-01':'प्रतिपदा','2026-01-02':'द्वितीया','2026-01-03':'तृतीया','2026-01-04':'चतुर्थी','2026-01-05':'पंचमी','2026-01-06':'षष्ठी','2026-01-07':'सप्तमी','2026-01-08':'अष्टमी','2026-01-09':'नवमी','2026-01-10':'दशमी','2026-01-11':'एकादशी','2026-01-12':'द्वादशी','2026-01-13':'त्रयोदशी','2026-01-14':'चतुर्दशी','2026-01-15':'पौर्णिमा','2026-01-16':'प्रतिपदा','2026-01-17':'द्वितीया','2026-01-18':'तृतीया','2026-01-19':'चतुर्थी','2026-01-20':'पंचमी','2026-01-21':'षष्ठी','2026-01-22':'सप्तमी','2026-01-23':'अष्टमी','2026-01-24':'नवमी','2026-01-25':'दशमी','2026-01-26':'एकादशी','2026-01-27':'द्वादशी','2026-01-28':'त्रयोदशी','2026-01-29':'चतुर्दशी','2026-01-30':'अमावस्या','2026-01-31':'प्रतिपदा',
+  '2026-02-01':'द्वितीया','2026-02-02':'तृतीया','2026-02-03':'चतुर्थी','2026-02-04':'पंचमी','2026-02-05':'षष्ठी','2026-02-06':'सप्तमी','2026-02-07':'अष्टमी','2026-02-08':'नवमी','2026-02-09':'दशमी','2026-02-10':'एकादशी','2026-02-11':'द्वादशी','2026-02-12':'त्रयोदशी','2026-02-13':'चतुर्दशी','2026-02-14':'पौर्णिमा','2026-02-15':'प्रतिपदा','2026-02-16':'द्वितीया','2026-02-17':'तृतीया','2026-02-18':'चतुर्थी','2026-02-19':'पंचमी','2026-02-20':'षष्ठी','2026-02-21':'सप्तमी','2026-02-22':'अष्टमी','2026-02-23':'नवमी','2026-02-24':'दशमी','2026-02-25':'एकादशी','2026-02-26':'द्वादशी','2026-02-27':'त्रयोदशी','2026-02-28':'चतुर्दशी',
+  '2026-03-01':'अमावस्या','2026-03-02':'प्रतिपदा','2026-03-03':'द्वितीया','2026-03-04':'तृतीया','2026-03-05':'चतुर्थी','2026-03-06':'पंचमी','2026-03-07':'षष्ठी','2026-03-08':'सप्तमी','2026-03-09':'अष्टमी','2026-03-10':'नवमी','2026-03-11':'दशमी','2026-03-12':'एकादशी','2026-03-13':'द्वादशी','2026-03-14':'त्रयोदशी','2026-03-15':'पौर्णिमा','2026-03-16':'प्रतिपदा','2026-03-17':'द्वितीया','2026-03-18':'तृतीया','2026-03-19':'चतुर्थी','2026-03-20':'पंचमी','2026-03-21':'षष्ठी','2026-03-22':'सप्तमी','2026-03-23':'अष्टमी','2026-03-24':'नवमी','2026-03-25':'दशमी','2026-03-26':'एकादशी','2026-03-27':'द्वादशी','2026-03-28':'त्रयोदशी','2026-03-29':'चतुर्दशी','2026-03-30':'अमावस्या','2026-03-31':'प्रतिपदा',
+  '2026-04-01':'द्वितीया','2026-04-02':'तृतीया','2026-04-03':'चतुर्थी','2026-04-04':'पंचमी','2026-04-05':'षष्ठी','2026-04-06':'सप्तमी','2026-04-07':'अष्टमी','2026-04-08':'नवमी','2026-04-09':'दशमी','2026-04-10':'एकादशी','2026-04-11':'द्वादशी','2026-04-12':'त्रयोदशी','2026-04-13':'चतुर्दशी','2026-04-14':'पौर्णिमा','2026-04-15':'प्रतिपदा','2026-04-16':'द्वितीया','2026-04-17':'तृतीया','2026-04-18':'चतुर्थी','2026-04-19':'पंचमी','2026-04-20':'षष्ठी','2026-04-21':'सप्तमी','2026-04-22':'अष्टमी','2026-04-23':'नवमी','2026-04-24':'दशमी','2026-04-25':'एकादशी','2026-04-26':'द्वादशी','2026-04-27':'त्रयोदशी','2026-04-28':'चतुर्दशी','2026-04-29':'अमावस्या','2026-04-30':'प्रतिपदा',
+  '2026-05-01':'द्वितीया','2026-05-02':'तृतीया','2026-05-03':'चतुर्थी','2026-05-04':'पंचमी','2026-05-05':'षष्ठी','2026-05-06':'सप्तमी','2026-05-07':'अष्टमी','2026-05-08':'नवमी','2026-05-09':'दशमी','2026-05-10':'एकादशी','2026-05-11':'द्वादशी','2026-05-12':'त्रयोदशी','2026-05-13':'चतुर्दशी','2026-05-14':'पौर्णिमा','2026-05-15':'प्रतिपदा','2026-05-16':'द्वितीया','2026-05-17':'तृतीया','2026-05-18':'चतुर्थी','2026-05-19':'पंचमी','2026-05-20':'षष्ठी','2026-05-21':'सप्तमी','2026-05-22':'अष्टमी','2026-05-23':'नवमी','2026-05-24':'दशमी','2026-05-25':'एकादशी','2026-05-26':'द्वादशी','2026-05-27':'त्रयोदशी','2026-05-28':'चतुर्दशी','2026-05-29':'अमावस्या','2026-05-30':'प्रतिपदा','2026-05-31':'द्वितीया',
+  '2026-06-01':'तृतीया','2026-06-02':'चतुर्थी','2026-06-03':'पंचमी','2026-06-04':'षष्ठी','2026-06-05':'सप्तमी','2026-06-06':'अष्टमी','2026-06-07':'नवमी','2026-06-08':'दशमी','2026-06-09':'एकादशी','2026-06-10':'द्वादशी','2026-06-11':'त्रयोदशी','2026-06-12':'चतुर्दशी','2026-06-13':'पौर्णिमा','2026-06-14':'प्रतिपदा','2026-06-15':'द्वितीया','2026-06-16':'तृतीया','2026-06-17':'चतुर्थी','2026-06-18':'पंचमी','2026-06-19':'षष्ठी','2026-06-20':'सप्तमी','2026-06-21':'अष्टमी','2026-06-22':'नवमी','2026-06-23':'दशमी','2026-06-24':'एकादशी','2026-06-25':'द्वादशी','2026-06-26':'त्रयोदशी','2026-06-27':'चतुर्दशी','2026-06-28':'अमावस्या','2026-06-29':'प्रतिपदा','2026-06-30':'द्वितीया',
+  '2026-07-01':'तृतीया','2026-07-02':'चतुर्थी','2026-07-03':'पंचमी','2026-07-04':'षष्ठी','2026-07-05':'सप्तमी','2026-07-06':'अष्टमी','2026-07-07':'नवमी','2026-07-08':'दशमी','2026-07-09':'एकादशी','2026-07-10':'द्वादशी','2026-07-11':'त्रयोदशी','2026-07-12':'चतुर्दशी','2026-07-13':'पौर्णिमा','2026-07-14':'प्रतिपदा','2026-07-15':'द्वितीया','2026-07-16':'तृतीया','2026-07-17':'चतुर्थी','2026-07-18':'पंचमी','2026-07-19':'षष्ठी','2026-07-20':'सप्तमी','2026-07-21':'अष्टमी','2026-07-22':'नवमी','2026-07-23':'दशमी','2026-07-24':'एकादशी','2026-07-25':'द्वादशी','2026-07-26':'त्रयोदशी','2026-07-27':'चतुर्दशी','2026-07-28':'अमावस्या','2026-07-29':'प्रतिपदा','2026-07-30':'द्वितीया','2026-07-31':'तृतीया',
+  '2026-08-01':'चतुर्थी','2026-08-02':'पंचमी','2026-08-03':'षष्ठी','2026-08-04':'सप्तमी','2026-08-05':'अष्टमी','2026-08-06':'नवमी','2026-08-07':'दशमी','2026-08-08':'एकादशी','2026-08-09':'द्वादशी','2026-08-10':'त्रयोदशी','2026-08-11':'चतुर्दशी','2026-08-12':'पौर्णिमा','2026-08-13':'प्रतिपदा','2026-08-14':'द्वितीया','2026-08-15':'तृतीया','2026-08-16':'चतुर्थी','2026-08-17':'पंचमी','2026-08-18':'षष्ठी','2026-08-19':'सप्तमी','2026-08-20':'अष्टमी','2026-08-21':'नवमी','2026-08-22':'दशमी','2026-08-23':'एकादशी','2026-08-24':'द्वादशी','2026-08-25':'त्रयोदशी','2026-08-26':'चतुर्दशी','2026-08-27':'अमावस्या','2026-08-28':'प्रतिपदा','2026-08-29':'द्वितीया','2026-08-30':'तृतीया','2026-08-31':'चतुर्थी',
+  '2026-09-01':'पंचमी','2026-09-02':'षष्ठी','2026-09-03':'सप्तमी','2026-09-04':'अष्टमी','2026-09-05':'नवमी','2026-09-06':'दशमी','2026-09-07':'एकादशी','2026-09-08':'द्वादशी','2026-09-09':'त्रयोदशी','2026-09-10':'चतुर्दशी','2026-09-11':'पौर्णिमा','2026-09-12':'प्रतिपदा','2026-09-13':'द्वितीया','2026-09-14':'तृतीया','2026-09-15':'चतुर्थी','2026-09-16':'पंचमी','2026-09-17':'षष्ठी','2026-09-18':'सप्तमी','2026-09-19':'अष्टमी','2026-09-20':'नवमी','2026-09-21':'दशमी','2026-09-22':'एकादशी','2026-09-23':'द्वादशी','2026-09-24':'त्रयोदशी','2026-09-25':'चतुर्दशी','2026-09-26':'अमावस्या','2026-09-27':'प्रतिपदा','2026-09-28':'द्वितीया','2026-09-29':'तृतीया','2026-09-30':'चतुर्थी',
+  '2026-10-01':'पंचमी','2026-10-02':'षष्ठी','2026-10-03':'सप्तमी','2026-10-04':'अष्टमी','2026-10-05':'नवमी','2026-10-06':'दशमी','2026-10-07':'एकादशी','2026-10-08':'द्वादशी','2026-10-09':'त्रयोदशी','2026-10-10':'चतुर्दशी','2026-10-11':'पौर्णिमा','2026-10-12':'प्रतिपदा','2026-10-13':'द्वितीया','2026-10-14':'तृतीया','2026-10-15':'चतुर्थी','2026-10-16':'पंचमी','2026-10-17':'षष्ठी','2026-10-18':'सप्तमी','2026-10-19':'अष्टमी','2026-10-20':'नवमी','2026-10-21':'दशमी','2026-10-22':'एकादशी','2026-10-23':'द्वादशी','2026-10-24':'त्रयोदशी','2026-10-25':'चतुर्दशी','2026-10-26':'अमावस्या','2026-10-27':'प्रतिपदा','2026-10-28':'द्वितीया','2026-10-29':'तृतीया','2026-10-30':'चतुर्थी','2026-10-31':'पंचमी',
+  '2026-11-01':'षष्ठी','2026-11-02':'सप्तमी','2026-11-03':'अष्टमी','2026-11-04':'नवमी','2026-11-05':'दशमी','2026-11-06':'एकादशी','2026-11-07':'द्वादशी','2026-11-08':'त्रयोदशी','2026-11-09':'चतुर्दशी','2026-11-10':'पौर्णिमा','2026-11-11':'प्रतिपदा','2026-11-12':'द्वितीया','2026-11-13':'तृतीया','2026-11-14':'चतुर्थी','2026-11-15':'पंचमी','2026-11-16':'षष्ठी','2026-11-17':'सप्तमी','2026-11-18':'अष्टमी','2026-11-19':'नवमी','2026-11-20':'दशमी','2026-11-21':'एकादशी','2026-11-22':'द्वादशी','2026-11-23':'त्रयोदशी','2026-11-24':'चतुर्दशी','2026-11-25':'अमावस्या','2026-11-26':'प्रतिपदा','2026-11-27':'द्वितीया','2026-11-28':'तृतीया','2026-11-29':'चतुर्थी','2026-11-30':'पंचमी',
+  '2026-12-01':'षष्ठी','2026-12-02':'सप्तमी','2026-12-03':'अष्टमी','2026-12-04':'नवमी','2026-12-05':'दशमी','2026-12-06':'एकादशी','2026-12-07':'द्वादशी','2026-12-08':'त्रयोदशी','2026-12-09':'चतुर्दशी','2026-12-10':'पौर्णिमा','2026-12-11':'प्रतिपदा','2026-12-12':'द्वितीया','2026-12-13':'तृतीया','2026-12-14':'चतुर्थी','2026-12-15':'पंचमी','2026-12-16':'षष्ठी','2026-12-17':'सप्तमी','2026-12-18':'अष्टमी','2026-12-19':'नवमी','2026-12-20':'दशमी','2026-12-21':'एकादशी','2026-12-22':'द्वादशी','2026-12-23':'त्रयोदशी','2026-12-24':'चतुर्दशी','2026-12-25':'पौर्णिमा','2026-12-26':'प्रतिपदा','2026-12-27':'द्वितीया','2026-12-28':'तृतीया','2026-12-29':'चतुर्थी','2026-12-30':'पंचमी','2026-12-31':'षष्ठी',
+};
+
+// ── RELIGION → DOT TYPE ──
+// Hindu=saffron, Muslim=green, Christian=white, Buddhist=blue, National=tricolor
+function getDotEl(religion) {
+  const el = document.createElement('div');
+  if(religion==='National'){
+    el.className='dc-dot-tricolor';
+  } else if(religion==='Christian'){
+    el.className='dc-dot-white';
+  } else {
+    el.className='dc-dot';
+    const colorMap={Hindu:'#FF6600',Muslim:'#27ae60',Buddhist:'#3498db',Sikh:'#d4ac0d',Jain:'#8e44ad',Other:'#7f8c8d'};
+    el.style.background=colorMap[religion]||'#666';
+  }
+  return el;
+}
+
+const relBarColors={Hindu:'#FF6600',Muslim:'#27ae60',Christian:'#e0e0e0',Buddhist:'#3498db',Sikh:'#d4ac0d',Jain:'#8e44ad',National:'#138808',Other:'#7f8c8d'};
+
+let festivals=[
+  {date:'2026-01-01',name:'New Year Day',religion:'National'},
+  {date:'2026-01-03',name:'Hazrat Ali Janmadin',religion:'Muslim'},
+  {date:'2026-01-14',name:'Makar Sankranti / Pongal',religion:'Hindu'},
+  {date:'2026-01-14',name:'Lohri',religion:'Sikh'},
+  {date:'2026-01-23',name:'Vasant Panchami',religion:'Hindu'},
+  {date:'2026-01-23',name:'Netaji Subhash Chandra Bose Jayanti',religion:'National'},
+  {date:'2026-01-26',name:'Republic Day',religion:'National'},
+  {date:'2026-02-01',name:'Guru Ravidas Jayanti',religion:'Sikh'},
+  {date:'2026-02-15',name:'Maha Shivratri',religion:'Hindu'},
+  {date:'2026-02-19',name:'Chhatrapati Shivaji Maharaj Jayanti',religion:'National'},
+  {date:'2026-02-19',name:'Ramzan Start (Approx)',religion:'Muslim'},
+  {date:'2026-03-03',name:'Holika Dahan',religion:'Hindu'},
+  {date:'2026-03-04',name:'Holi',religion:'Hindu'},
+  {date:'2026-03-19',name:'Gudi Padwa / Ugadi',religion:'Hindu'},
+  {date:'2026-03-20',name:'Jamat-ul-Vida',religion:'Muslim'},
+  {date:'2026-03-21',name:'Eid-ul-Fitr (Approx)',religion:'Muslim'},
+  {date:'2026-03-26',name:'Ram Navami',religion:'Hindu'},
+  {date:'2026-03-31',name:'Mahavir Jayanti',religion:'Jain'},
+  {date:'2026-04-03',name:'Good Friday',religion:'Christian'},
+  {date:'2026-04-05',name:'Easter Sunday',religion:'Christian'},
+  {date:'2026-04-14',name:'Baisakhi',religion:'Sikh'},
+  {date:'2026-04-14',name:'Dr. Ambedkar Jayanti',religion:'National'},
+  {date:'2026-04-14',name:'Tamil New Year / Vishu',religion:'Hindu'},
+  {date:'2026-05-01',name:'Buddha Purnima / Vesak',religion:'Buddhist'},
+  {date:'2026-05-01',name:'Maharashtra Day / Labour Day',religion:'National'},
+  {date:'2026-05-09',name:'Rabindranath Tagore Jayanti',religion:'National'},
+  {date:'2026-05-27',name:'Eid-ul-Adha / Bakri Eid (Approx)',religion:'Muslim'},
+  {date:'2026-06-26',name:'Muharram / Ashura (Approx)',religion:'Muslim'},
+  {date:'2026-07-16',name:'Rath Yatra',religion:'Hindu'},
+  {date:'2026-08-15',name:'Independence Day',religion:'National'},
+  {date:'2026-08-28',name:'Raksha Bandhan',religion:'Hindu'},
+  {date:'2026-09-04',name:'Janmashtami',religion:'Hindu'},
+  {date:'2026-09-14',name:'Ganesh Chaturthi',religion:'Hindu'},
+  {date:'2026-09-23',name:'Ganesh Visarjan',religion:'Hindu'},
+  {date:'2026-10-02',name:'Gandhi Jayanti',religion:'National'},
+  {date:'2026-10-11',name:'Navratri Start',religion:'Hindu'},
+  {date:'2026-10-19',name:'Dussehra / Vijayadashami',religion:'Hindu'},
+  {date:'2026-11-08',name:'Diwali / Lakshmi Puja',religion:'Hindu'},
+  {date:'2026-11-09',name:'Bali Pratipada / Padwa',religion:'Hindu'},
+  {date:'2026-11-11',name:'Bhai Dooj',religion:'Hindu'},
+  {date:'2026-11-24',name:'Guru Nanak Jayanti',religion:'Sikh'},
+  {date:'2026-12-25',name:'Christmas',religion:'Christian'},
+  {date:'2026-12-31',name:'New Year Eve',religion:'National'},
+];
+
+let myEvents=[];
+const evtColors=['#3498db','#2ecc71','#e74c3c','#f39c12','#9b59b6','#1abc9c','#e67e22','#ec407a','#00bcd4','#ff7043','#ffffff','#ffd700'];
+let selectedColor=evtColors[0];
+
+// Build color dots
+const colorRow=document.getElementById('colorRow');
+evtColors.forEach(c=>{
+  const d=document.createElement('div');
+  d.className='color-opt'+(c===selectedColor?' selected':'');
+  d.style.background=c;
+  d.style.border=c==='#ffffff'?'2px solid #444':'2px solid transparent';
+  d.onclick=()=>{selectedColor=c;document.querySelectorAll('.color-opt').forEach(el=>el.classList.remove('selected'));d.classList.add('selected');};
+  colorRow.appendChild(d);
+});
+
+const MONTHS_SHORT=['Jan.','Feb.','Mar.','Apr.','May','Jun.','Jul.','Aug.','Sep.','Oct.','Nov.','Dec.'];
+const MONTHS_FULL=['January','February','March','April','May','June','July','August','September','October','November','December'];
+const DAYS_FULL=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+const today=new Date();
+let viewDate=new Date(2026,today.getMonth(),1);
+
+function getKey(y,m,d){return `${y}-${String(m+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;}
+
+function updateClock(){
+  const now=new Date();
+  document.getElementById('clockTime').innerHTML=`${String(now.getHours()).padStart(2,'0')}<span class="sep">:</span>${String(now.getMinutes()).padStart(2,'0')}`;
+  document.getElementById('clockDate').textContent=`${DAYS_FULL[now.getDay()]}, ${now.getDate()} ${MONTHS_FULL[now.getMonth()]} ${now.getFullYear()}`;
+  const k=getKey(now.getFullYear(),now.getMonth(),now.getDate());
+  document.getElementById('clockTithi').textContent=tithiData[k]?`✦ ${tithiData[k]}`:'';
+}
+
+function allItemsFor(y,m,d){
+  const key=getKey(y,m,d);
+  const fests=festivals.filter(f=>f.date===key);
+  const evts=myEvents.filter(e=>e.date===key);
+  return {fests,evts};
+}
+
+function renderCalendar(){
+  if(viewDate.getFullYear()<2026)viewDate=new Date(2026,0,1);
+  if(viewDate.getFullYear()>2026)viewDate=new Date(2026,11,1);
+  const y=viewDate.getFullYear(),m=viewDate.getMonth();
+  document.getElementById('monthBig').textContent=MONTHS_SHORT[m];
+  document.getElementById('yearNum').textContent=y;
+  const outer=document.getElementById('daysOuter');
+  outer.innerHTML='';
+  const firstDay=new Date(y,m,1).getDay();
+  const dim=new Date(y,m+1,0).getDate();
+  const prevDim=new Date(y,m,0).getDate();
+  const cells=[];
+  for(let i=firstDay-1;i>=0;i--)cells.push({day:prevDim-i,type:'other'});
+  for(let d=1;d<=dim;d++)cells.push({day:d,type:'current'});
+  const rem=cells.length%7===0?0:7-cells.length%7;
+  for(let d=1;d<=rem;d++)cells.push({day:d,type:'other'});
+  for(let w=0;w<cells.length/7;w++){
+    const row=document.createElement('div');
+    row.className='week-row';
+    for(let i=0;i<7;i++){
+      const cell=cells[w*7+i];
+      const dow=i,d=cell.day;
+      const isToday=cell.type==='current'&&d===today.getDate()&&m===today.getMonth()&&y===today.getFullYear();
+      const {fests,evts}=cell.type==='current'?allItemsFor(y,m,d):{fests:[],evts:[]};
+      const tithi=cell.type==='current'?(tithiData[getKey(y,m,d)]||''):'';
+      const dc=document.createElement('div');
+      let cls='dc';
+      if(cell.type==='other')cls+=' other';
+      if(dow===0&&cell.type!=='other')cls+=' sun-col';
+      if(dow===6&&cell.type!=='other')cls+=' sat-col';
+      if(isToday)cls+=' today';
+      dc.className=cls;
+      dc.innerHTML=`<div class="dc-num">${d}</div>${tithi&&cell.type==='current'?`<div class="dc-tithi">${tithi}</div>`:''}`;
+      const allDots=[...fests,...evts];
+      if(allDots.length>0){
+        const dotsDiv=document.createElement('div');
+        dotsDiv.className='dc-dots';
+        allDots.slice(0,4).forEach(item=>{
+          if(item.religion!==undefined){
+            dotsDiv.appendChild(getDotEl(item.religion));
+          } else {
+            const d2=document.createElement('div');
+            d2.className='dc-dot';
+            d2.style.background=item.color;
+            dotsDiv.appendChild(d2);
+          }
+        });
+        dc.appendChild(dotsDiv);
+        const names=[...fests.map(f=>f.name),...evts.map(e=>e.name)];
+        dc.addEventListener('click',e=>{
+          const tip=document.getElementById('tip');
+          tip.textContent=names.join(' | ');
+          tip.style.display='block';
+          const r=dc.getBoundingClientRect();
+          tip.style.left=Math.min(r.left,window.innerWidth-200)+'px';
+          tip.style.top=(r.top-46)+'px';
+          setTimeout(()=>tip.style.display='none',2500);
+        });
+      }
+      row.appendChild(dc);
+    }
+    outer.appendChild(row);
+  }
+}
+
+function changeMonth(dir){viewDate=new Date(viewDate.getFullYear(),viewDate.getMonth()+dir,1);renderCalendar();renderFestList();renderEventList();}
+function goToday(){viewDate=new Date(2026,today.getMonth(),1);renderCalendar();renderFestList();renderEventList();}
+
+function renderFestList(){
+  const c=document.getElementById('festList');c.innerHTML='';
+  const grouped={};
+  festivals.sort((a,b)=>a.date.localeCompare(b.date)).forEach(f=>{const mo=parseInt(f.date.split('-')[1])-1;if(!grouped[mo])grouped[mo]=[];grouped[mo].push(f);});
+  Object.keys(grouped).sort((a,b)=>+a-+b).forEach(mo=>{
+    const lbl=document.createElement('div');lbl.className='fest-month-lbl';lbl.textContent=MONTHS_FULL[mo];c.appendChild(lbl);
+    grouped[mo].forEach(f=>{
+      const day=f.date.split('-')[2];
+      const row=document.createElement('div');row.className='fest-row';
+      row.innerHTML=`<div class="fest-bar" style="background:${relBarColors[f.religion]||'#555'}"></div><div class="fest-info"><div class="fest-name">${f.name}</div><div class="fest-rel">${f.religion}</div></div><div class="fest-dt">${day} ${MONTHS_FULL[mo].slice(0,3)}</div>`;
+      c.appendChild(row);
+    });
+  });
+}
+
+function renderEventList(){
+  const card=document.getElementById('eventsCard'),c=document.getElementById('eventList');
+  if(myEvents.length===0){card.style.display='none';return;}
+  card.style.display='block';c.innerHTML='';
+  myEvents.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{
+    const parts=e.date.split('-'),mo=parseInt(parts[1])-1;
+    const row=document.createElement('div');row.className='fest-row';
+    row.innerHTML=`<div class="fest-bar" style="background:${e.color}"></div><div class="fest-info"><div class="fest-name">${e.name}</div><div class="fest-rel">${e.note||'Personal'}</div></div><div class="fest-dt">${parts[2]} ${MONTHS_FULL[mo].slice(0,3)}</div>`;
+    c.appendChild(row);
+  });
+}
+
+// PANEL
+let currentTab='event';
+function openPanel(tab){document.getElementById('overlay').classList.add('open');switchTab(tab||'event');if(tab==='font')buildFontGrid();}
+function closePanel(){document.getElementById('overlay').classList.remove('open');renderCalendar();renderFestList();renderEventList();}
+function switchTab(tab){
+  currentTab=tab;
+  ['event','fest','font'].forEach(t=>{
+    document.getElementById(`form${t.charAt(0).toUpperCase()+t.slice(1)}`).style.display=t===tab?'block':'none';
+    document.getElementById(`tab${t.charAt(0).toUpperCase()+t.slice(1)}`).classList.toggle('active',t===tab);
+  });
+  document.getElementById('addBtn').style.display=tab==='font'?'none':'block';
+  if(tab==='event')renderExistEvents();
+  else if(tab==='fest')renderExistFests();
+  else buildFontGrid();
+}
+function renderExistEvents(){
+  const el=document.getElementById('existEvents');el.innerHTML='';
+  if(myEvents.length===0){el.innerHTML='<div style="font-size:14px;color:#2a2a2a;padding:4px 0;font-family:var(--font);">No events yet</div>';return;}
+  myEvents.slice().sort((a,b)=>a.date.localeCompare(b.date)).forEach(e=>{
+    const item=document.createElement('div');item.className='ex-item';
+    item.innerHTML=`<div class="ex-dot" style="background:${e.color}"></div><div class="ex-name">${e.name}</div><div class="ex-date">${e.date.slice(5)}</div><button class="ex-del" onclick="delEvent('${e.date}','${e.name}')">✕</button>`;
+    el.appendChild(item);
+  });
+}
+function renderExistFests(){
+  const el=document.getElementById('existFests');el.innerHTML='';
+  festivals.slice().sort((a,b)=>a.date.localeCompare(b.date)).slice(0,8).forEach(f=>{
+    const item=document.createElement('div');item.className='ex-item';
+    item.innerHTML=`<div class="ex-dot" style="background:${relBarColors[f.religion]||'#555'}"></div><div class="ex-name">${f.name}</div><div class="ex-date">${f.date.slice(5)}</div><button class="ex-del" onclick="delFest('${f.date}','${f.name}')">✕</button>`;
+    el.appendChild(item);
+  });
+}
+function addItem(){
+  if(currentTab==='event'){
+    const name=document.getElementById('evtName').value.trim(),date=document.getElementById('evtDate').value,note=document.getElementById('evtNote').value.trim();
+    if(!name||!date)return;
+    myEvents.push({date,name,note,color:selectedColor});myEvents.sort((a,b)=>a.date.localeCompare(b.date));
+    document.getElementById('evtName').value='';document.getElementById('evtNote').value='';renderExistEvents();
+  } else {
+    const name=document.getElementById('festName').value.trim(),date=document.getElementById('festDate').value,religion=document.getElementById('festRel').value;
+    if(!name||!date)return;
+    festivals.push({date,name,religion});festivals.sort((a,b)=>a.date.localeCompare(b.date));
+    document.getElementById('festName').value='';renderExistFests();
+  }
+}
+function delEvent(date,name){myEvents=myEvents.filter(e=>!(e.date===date&&e.name===name));renderExistEvents();}
+function delFest(date,name){festivals=festivals.filter(f=>!(f.date===date&&f.name===name));renderExistFests();}
+
+// INIT
+updateClock();setInterval(updateClock,1000);
+renderCalendar();renderFestList();renderEventList();
+</script>
+</body>
+</html>
